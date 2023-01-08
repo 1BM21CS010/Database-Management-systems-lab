@@ -1,0 +1,97 @@
+CREATE database Insurance_Database;
+USE Insurance_Database;
+CREATE TABLE PERSON (
+    driver_id VARCHAR(10),
+    driver_name VARCHAR(15),
+    address CHAR(35),
+    PRIMARY KEY (driver_id)
+);
+CREATE TABLE CAR (
+    reg_num VARCHAR(10),
+    model VARCHAR(15),
+    model_year INT,
+    PRIMARY KEY (reg_num)
+);
+CREATE TABLE ACCIDENT (
+    report_num INT,
+    accident_date DATE,
+    location VARCHAR(35),
+    PRIMARY KEY (report_num)
+);
+CREATE TABLE OWNS (
+    driver_id VARCHAR(10),
+    reg_num VARCHAR(10),
+    PRIMARY KEY (driver_id , reg_num),
+    FOREIGN KEY (driver_id)
+        REFERENCES PERSON (driver_id),
+    FOREIGN KEY (reg_num)
+        REFERENCES CAR (reg_num)
+);
+CREATE TABLE PARTICIPATED (
+    driver_id VARCHAR(10),
+    reg_num VARCHAR(10),
+    report_num INT,
+    damage_amount INT,
+    PRIMARY KEY (driver_id , reg_num, report_num),
+    FOREIGN KEY (driver_id)
+        REFERENCES PERSON (driver_id),
+    FOREIGN KEY (reg_num)
+        REFERENCES CAR (reg_num),
+    FOREIGN KEY (report_num)
+        REFERENCES ACCIDENT (report_num)
+);
+desc PERSON;
+desc CAR;
+desc ACCIDENT;
+desc OWNS;
+desc PARTICIPATED;
+
+insert into PERSON values ('A01','Richard','Srinivas nagar');
+insert into PERSON values ('A02','Pradeep','Rajaji nagar');
+insert into PERSON values ('A03','Smith','Ashok nagar');
+insert into PERSON values ('A04','Venu','N R Colony');
+insert into PERSON values ('A05','John','Hanumanth nagar');
+
+insert into CAR values ('KA052250','Indica',1990);
+insert into CAR values ('KA031181','Lancer',1957);
+insert into CAR values ('KA095477','Toyota',1998);
+insert into CAR values ('KA053408','Honda',2008);
+insert into CAR values ('KA041702','Audi',2005);
+
+insert into OWNS values ('A01','KA052250');
+insert into OWNS values ('A02','KA053408');
+insert into OWNS values ('A03','KA031181');
+insert into OWNS values ('A04','KA095477');
+insert into OWNS values ('A05','KA041702');
+
+insert into ACCIDENT values (11, '2003-01-01','Mysore Road');
+insert into ACCIDENT values (12,'2004-02-02','South end Circle');
+insert into ACCIDENT values (13,'2003-01-21','Bull temple Road');
+insert into ACCIDENT values (14,'2008-02-17','Mysore Roa');
+insert into ACCIDENT values (15,'2004-03-05','Kanakpura Road');
+
+insert into PARTICIPATED values ('A01','KA052250',11,10000);
+insert into PARTICIPATED values ('A02','KA053408',12,50000);
+insert into PARTICIPATED values ('A03','KA095477',13,25000);
+insert into PARTICIPATED values ('A04','KA031181',14,3000);
+insert into PARTICIPATED values ('A05','KA041702',15,4000);
+
+SELECT * FROM PERSON;
+SELECT * FROM CAR;
+SELECT * FROM OWNS;
+SELECT * FROM ACCIDENT;
+SELECT * FROM PARTICIPATED;
+SELECT * FROM PARTICIPATED WHERE report_num=12;
+
+UPDATE PARTICIPATED set damage_amount=25000 where reg_num='KA053408'AND report_num=12;
+
+SELECT * FROM PARTICIPATED WHERE report_num=12;
+
+SELECT driver_id from PARTICIPATED P, ACCIDENT A WHERE P.report_num=A.report_num AND A.accident_date like '__03%';
+
+SELECT COUNT(driver_id) from PARTICIPATED P, ACCIDENT A WHERE P.report_num=A.report_num AND A.accident_date like '__03%';
+
+insert into accident values(16,'2008-03-08','Domlur');
+
+select * from accident;
+
